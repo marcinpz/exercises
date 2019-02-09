@@ -16,7 +16,10 @@ def read_exercise_from_text(text):
 
 # https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.solve.html#numpy.linalg.solve
 def solve_linear_equation(A, b):
-    return np.linalg.solve(A, b)
+    if len(A) > 1:
+        return np.linalg.solve(A, b)
+    else:
+        return b[0] / A[0]
 
 
 def read_exercise_from_file(fpath):
