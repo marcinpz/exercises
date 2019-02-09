@@ -3,6 +3,20 @@ import sys
 import numpy as np
 from io import StringIO
 
+USAGE = """
+Program for solving n-element linear equations
+
+Usage:
+    {program} [--test|--exercise-file <filepath>]
+    
+Where:
+    filepath - is text file containing matrix of elements of equation in form:
+n
+A11 A12...A1n b1
+...
+An1.......Ann bn
+"""
+
 
 def read_exercise_from_text(text):
     c = StringIO(text.strip())
@@ -58,12 +72,11 @@ def test():
 
 
 def usage():
-    print("Usage:")
-    print(f"{sys.argv[0]} [--test|--exercise-file <filepath>]")
+    usage_txt = USAGE.format(program=sys.argv[0])
+    print(usage_txt)
 
 
 if __name__ == '__main__':
-    print(sys.argv, len(sys.argv))
     if len(sys.argv) == 1:
         usage()
     else:
