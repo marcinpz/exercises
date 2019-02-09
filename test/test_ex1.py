@@ -1,7 +1,12 @@
 import pytest
 import numpy as np
+from pytest import raises
 
 from exercise import ex1
+
+
+class LinAlgSingularMatrixError(np.linalg.LinAlgError):
+    pass
 
 
 @pytest.mark.parametrize("test_input,size,a,b", [
@@ -31,7 +36,7 @@ from exercise import ex1
 """,
      1,
      [2],
-     [4])
+     1)
 ])
 def test_read_exercise_from_text(test_input, size, a, b):
     _size, _a, _b = ex1.read_exercise_from_text(test_input)
@@ -61,11 +66,43 @@ def test_solve_linear_equation(a, b, expected_result):
 
 @pytest.mark.parametrize("a, b, expected_result", [
     (
-            [2],
-            [4],
-            [2]
+            [1],
+            2,
+            2
     )
 ])
 def test_solve_linear_equation__dim1(a, b, expected_result):
-    result = ex1.solve_linear_equation(a, b)
-    assert np.allclose(result, expected_result)
+    assert ex1.solve_linear_equation(a, b) == expected_result
+
+
+@pytest.mark.parametrize("a, b, expected_result", [
+    (
+            [[1, 2],
+             [2, 4]],
+            [3, 6],
+            None)
+])
+def test_solve_linear_equation__singular_matrix(a, b, expected_result):
+    with raises(np.linalg.LinAlgError, match="Singular matrix"):
+        ex1.solve_linear_equation(a, b)
+
+
+# @pytest.mark.parametrize("a, b, expected_result", [
+#     (
+#             [[1, 2],
+#              [2, 4]],
+#             [3, 7],
+#             None)
+#     ,
+#     (
+#             [0],
+#             2,
+#             None)
+# ])
+# def test_solve_linear_equation__no_solution(a, b, expected_result):
+#     # res = ex1.solve_linear_equation(a, b)
+#     # print(res)
+#     # test = np.allclose(np.dot(a, res), b)
+#     # print(np.dot(a, res), b, test)
+#     with raises(LinAlgSingularMatrixError, match="Singular matrix"):
+#         ex1.solve_linear_equation(a, b)

@@ -33,7 +33,7 @@ def solve_linear_equation(A, b):
     if len(A) > 1:
         return np.linalg.solve(A, b)
     else:
-        return b[0] / A[0]
+        return b / A[0]
 
 
 def read_exercise_from_file(fpath):
@@ -53,7 +53,7 @@ def exercise(exercise_reader):
     print(b)
 
     x = solve_linear_equation(A, b)
-    print('Result=')
+    print('Result: ')
     print(x)
 
     test_result = np.allclose(np.dot(A, x), b)
