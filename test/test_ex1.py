@@ -31,10 +31,10 @@ from exercise import ex1
      [[2, 1]])
 ])
 def test_read_exercise_from_text(test_input, size, a):
-    res = ex1.read_exercise_from_text(test_input)
-    _size, _a = res
+    _size, _a = ex1.read_exercise_from_text(test_input)
 
     assert size == _size
+    assert np.shape(a) == _a.shape
     np.allclose(a, _a)
 
 
@@ -52,7 +52,7 @@ def test_read_exercise_from_text(test_input, size, a):
      [2])
 ])
 def test_solve_linear_equation__one_solution(data, expected_result):
-    err, result = ex1.solve_linear_equation(data)
+    err, result = ex1.solve_linear_equation(np.array(data))
     assert err is None
     assert np.allclose(result, expected_result)
 
@@ -63,7 +63,7 @@ def test_solve_linear_equation__one_solution(data, expected_result):
      [2, 2, 4]],
 ])
 def test_solve_linear_equation__no_solution(data):
-    err, result = ex1.solve_linear_equation(data)
+    err, result = ex1.solve_linear_equation(np.array(data))
     assert isinstance(err, ex1.LinEquationNoSolutionError)
     assert result is None
 
@@ -76,6 +76,32 @@ def test_solve_linear_equation__no_solution(data):
      [1, 3, 2]]
 ])
 def test_solve_linear_equation__infinite_solutions(data):
-    err, result = ex1.solve_linear_equation(data)
+    err, result = ex1.solve_linear_equation(np.array(data))
     assert isinstance(err, ex1.LinEquationMultipleSolutionsError)
     assert result is None
+
+
+@pytest.mark.parametrize("a, expected_result", [
+    ([[0, 1], [0, 2]], 1),
+    ([[0, 1], [1, 3]], 2),
+    ([[0, 1, 2], [0, 1, 2]], 1),
+    ([[1]], 1)
+])
+def test_get_independent_matrix_rows(a, expected_result):
+    assert ex1.get_independent_matrix_rows(np.array(a)) == expected_result
+
+
+@pytest.mark.parametrize("data, x, y", [
+    ([[0, 0]], [[0]], [0]),
+    ([[1, 1, 1],
+      [2, 2, 2]],
+     [[1, 1],
+      [2, 2]],
+     [1, 2])
+])
+def test_data_to_xy(data, x, y):
+    _x, _y = ex1.data_to_xy(np.array(data))
+    assert _x.shape == np.shape(x)
+    assert _y.shape == np.shape(y)
+    assert np.allclose(_x, x)
+    assert np.allclose(_y, y)
