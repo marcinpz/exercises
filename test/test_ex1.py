@@ -57,15 +57,25 @@ def test_solve_linear_equation__one_solution(data, expected_result):
     assert np.allclose(result, expected_result)
 
 
-@pytest.mark.parametrize("data, expected_result", [
-    ([[0, 2]], None),
-    (
-            [[1, 1, 1],
-             [2, 2, 4]],
-            None
-    )
+@pytest.mark.parametrize("data", [
+    [[0, 2]],
+    [[1, 1, 1],
+     [2, 2, 4]],
 ])
-def test_solve_linear_equation__no_solution(data, expected_result):
+def test_solve_linear_equation__no_solution(data):
     err, result = ex1.solve_linear_equation(data)
-    assert isinstance(err, np.linalg.LinAlgError)
+    assert isinstance(err, ex1.LinEquationNoSolutionError)
+    assert result is None
 
+
+@pytest.mark.parametrize("data", [
+    [[0, 0]],
+    [[1, 1, 1],
+     [2, 2, 2]],
+    [[1, 3, 2],
+     [1, 3, 2]]
+])
+def test_solve_linear_equation__infinite_solutions(data):
+    err, result = ex1.solve_linear_equation(data)
+    assert isinstance(err, ex1.LinEquationMultipleSolutionsError)
+    assert result is None
