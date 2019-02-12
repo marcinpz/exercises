@@ -32,3 +32,8 @@ Program checks hyphotesis that for each natural number:
 Example:
     121 is palindrom because reversed is the same number
     78 because 78+87=165, 165+561=726, 726+627=1353, 1353+3531=4884 - is palindrom
+    
+ex4
+---
+
+Program finds prime numbers with Eratostene sieve method.
